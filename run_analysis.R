@@ -60,10 +60,6 @@ data <- subset(data, select = featuresMeanSD)
 data <- merge(activityLabels, data, by = "activityNumber", all.x=TRUE)
 data$activityName <- as.character(data$activityName)
 
-dataAggregate <- aggregate(. ~ subject - activityName, data = data, mean) 
-data <- tbl_df(arrange(dataAggregate, subject, activityName))
-
-
 # 4. Appropriately labels the data set with descriptive variable names.
 names(data) <- gsub("std()", "SD", names(data))
 names(data) <- gsub("mean()", "Mean", names(data))
@@ -75,4 +71,6 @@ names(data) <- gsub("Mag", "Magnitude", names(data))
 names(data) <- gsub("BodyBody", "Body", names(data))
 
 # 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject
+dataAggregate <- aggregate(. ~ subject - activityName, data = data, mean) 
+data <- arrange(dataAggregate, subject, activityName)
 write.table(data, "TidyData.txt", row.name=FALSE)
